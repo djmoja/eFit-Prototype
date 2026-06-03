@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>eFit – Fitnessstudio App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="phone-container">
+    <div class="phone-notch"></div>
+    <div class="phone-screen">
+      <main id="app">
+        <!-- LOGIN PAGE -->
+        <section class="page" data-page="login">
+          <div class="login-card">
+            <div class="logo">eFit</div>
+            <div class="tab-menu">
+              <button class="tab-button active" data-tab="login">Login</button>
+              <button class="tab-button" data-tab="register">Registrieren</button>
+            </div>
+            <div class="tab-panel active" data-panel="login">
+              <form id="loginForm">
+                <label for="username">E-MAIL</label>
+                <input id="username" name="username" placeholder="hello@efit.com" required>
+                <label for="password">PASSWORT</label>
+                <input id="password" name="password" type="password" placeholder="••••••" required>
+                <label class="small-checkbox"><input type="checkbox"> PASSWORT VERGESSEN?</label>
+                <button type="submit" class="btn primary">LOGIN</button>
+              </form>
+            </div>
+            <div class="tab-panel" data-panel="register">
+              <form id="registerForm">
+                <label for="regName">NAME</label>
+                <input id="regName" name="regName" placeholder="Name" required>
+                <label for="regEmail">E-MAIL</label>
+                <input id="regEmail" name="regEmail" type="email" placeholder="hello@efit.com" required>
+                <label for="regPassword">PASSWORT</label>
+                <input id="regPassword" name="regPassword" type="password" placeholder="••••••" required>
+                <label for="regPassword2">PASSWORT WIEDERHOLEN</label>
+                <input id="regPassword2" name="regPassword2" type="password" placeholder="••••••" required>
+                <button type="submit" class="btn primary">REGISTRIEREN</button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- DASHBOARD PAGE -->
+        <section class="page" data-page="dashboard">
+          <header class="page-header">
+            <h2>Dashboard</h2>
+          </header>
+          <div class="content">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-value" id="stepsValue">3,214</div>
+                <div class="stat-label">Schritte</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="caloriesValue">1,850</div>
+                <div class="stat-label">Kalorien</div>
+              </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="chart-card">
+              <h3>Hydration Level</h3>
+              <div class="chart-container">
+                <svg id="hydrationChart" viewBox="0 0 200 120" class="chart-svg"></svg>
+              </div>
+              <div class="chart-legend">
+                <span id="hydrationValue">67%</span>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <h3>Auslastung Fitnesstudio</h3>
+              <div class="chart-container">
+                <svg id="utilizationChart" viewBox="0 0 200 100" class="chart-svg"></svg>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <h3>Trainingshistorie (7 Tage)</h3>
+              <div class="chart-container">
+                <svg id="trainingChart" viewBox="0 0 200 80" class="chart-svg"></svg>
+              </div>
+            </div>
+
+            <button class="btn primary" onclick="navigate('einchecken')">JETZT EINCHECKEN</button>
+          </div>
+        </section>
+
+        <!-- SPORT PAGE -->
+        <section class="page" data-page="sport">
+          <header class="page-header">
+            <h2>Sport</h2>
+          </header>
+          <div class="content">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+              <div class="section-title">Wähle einen Trainingsplan</div>
+              <button type="button" class="btn-add" onclick="openAddTrainingModal()" aria-label="Trainingsplan hinzufügen">+</button>
+            </div>
+            <div id="trainingPlansList" class="plan-list">
+              <!-- Dynamisch generiert -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ERNÄHRUNG PAGE -->
+        <section class="page" data-page="ernährung">
+          <header class="page-header">
+            <h2>Ernährung</h2>
+          </header>
+          <div class="content">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+              <div class="section-title">Wähle einen Essensplan</div>
+              <button type="button" class="btn-add" onclick="openAddMealModal()" aria-label="Essensplan hinzufügen">+</button>
+            </div>
+            <div id="mealPlansList" class="plan-list">
+              <!-- Dynamisch generiert -->
+            </div>
+          </div>
+        </section>
+
+        <!-- PROFIL PAGE -->
+        <section class="page" data-page="profil">
+          <header class="page-header">
+            <h2>Profil</h2>
+          </header>
+          <div class="content">
+            <div class="profile-card">
+              <div class="avatar"></div>
+              <h3 id="profileName">Benutzer</h3>
+              <p id="profileEmail">demo@efit.de</p>
+            </div>
+            <div class="accessibility-panel">
+              <div class="accessibility-label">Barrierefrei-Modus</div>
+              <button type="button" id="accessibilityToggle" class="btn secondary" aria-pressed="false">Barrierefrei: AUS</button>
+              <p class="accessibility-note">Größere Texte, stärkere Kontrastfarben und größere Bedienelemente.</p>
+            </div>
+            <form id="profileForm" class="profile-form">
+              <label for="memberId">Mitgliedsnummer</label>
+              <input id="memberId" name="memberId" placeholder="EF-000123" readonly>
+              <label for="fullName">Vor- & Nachname</label>
+              <input id="fullName" name="fullName" placeholder="Max Mustermann" required>
+              <label for="address">Adresse</label>
+              <input id="address" name="address" placeholder="Musterstraße 1" required>
+              <label for="birthday">Geburtstag</label>
+              <input id="birthday" name="birthday" type="date" required>
+              <h3 class="section-subtitle">Körperwerte</h3>
+              <div class="profile-grid">
+                <input id="age" name="age" placeholder="Alter" required>
+                <input id="height" name="height" placeholder="Körpergröße" required>
+                <input id="weight" name="weight" placeholder="Gewicht" required>
+                <input id="bmi" name="bmi" placeholder="BMI" readonly>
+              </div>
+              <label class="section-subtitle">Fitness-Erfahrung</label>
+              <div class="star-rating" id="fitnessStars">
+                <button type="button" class="star" data-value="1"></button>
+                <button type="button" class="star" data-value="2"></button>
+                <button type="button" class="star" data-value="3"></button>
+                <button type="button" class="star" data-value="4"></button>
+                <button type="button" class="star" data-value="5"></button>
+              </div>
+              <button type="submit" class="btn primary">SPEICHERN</button>
+            </form>
+            <button class="btn secondary" onclick="logout()">ABMELDEN</button>
+          </div>
+        </section>
+
+        <!-- COMMUNITY PAGE -->
+        <section class="page" data-page="community">
+          <header class="page-header">
+            <h2>Community</h2>
+          </header>
+          <div class="content">
+            <div class="match-card">
+              <div class="match-header">
+                <div>
+                  <div class="match-title">Trainingspartner finden</div>
+                  <div class="match-subtitle">Swipe nach rechts für Match, links für überspringen</div>
+                </div>
+              </div>
+              <div class="match-profile" id="matchProfile">
+                <div class="match-name">Lade Profile...</div>
+                <div class="match-info">Level, Sportziel, Verfügbarkeit</div>
+                <div class="match-bio">Ziehe los, um einen passenden Trainingspartner zu finden.</div>
+              </div>
+              <div class="match-actions">
+                <button class="btn secondary" onclick="rejectMatch()">Überspringen</button>
+                <button class="btn primary" onclick="acceptMatch()">Match</button>
+              </div>
+            </div>
+            <div class="section-title">Community Feed</div>
+            <div class="post-input">
+              <input id="postText" placeholder="Teile etwas mit der Community..." />
+              <button class="btn small" onclick="postToFeed()">POSTEN</button>
+            </div>
+            <div id="feedList" class="feed-list">
+              <div class="feed-item">
+                <div class="feed-author">Anna S.</div>
+                <div class="feed-text">Tolles Workout heute! Neue PR im Bankdrücken!</div>
+                <div class="feed-time">vor 2h</div>
+              </div>
+              <div class="feed-item">
+                <div class="feed-author">Mark T.</div>
+                <div class="feed-text">Wer läuft morgen um 7 Uhr?</div>
+                <div class="feed-time">vor 4h</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- EINCHECKEN PAGE -->
+        <section class="page" data-page="einchecken">
+          <header class="page-header">
+            <h2>Einchecken</h2>
+          </header>
+          <div class="content">
+            <div class="checkin-card">
+              <div class="member-card">
+                <div class="member-header">Mitgliedskarte</div>
+                <div class="member-number" id="memberNumberDisplay">EF-000123</div>
+                <div class="member-data">
+                  <div><strong>Name</strong><span id="memberNameDisplay">Max Mustermann</span></div>
+                  <div><strong>Mitglied seit</strong><span>2024</span></div>
+                </div>
+              </div>
+              <p>Nutze NFC zum Einchecken direkt im Studio.</p>
+              <button id="checkinBtn" class="btn primary" onclick="performCheckin()">NFC EINCHECKEN</button>
+              <p id="checkinStatus" class="checkin-status" aria-live="polite"></p>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Expandable Stack Navigation -->
+      <div class="stack-nav-container" id="stackNavContainer">
+        <button class="stack-nav-toggle" id="stackNavToggle">
+          <span id="activePageName">Dashboard</span>
+          <span class="toggle-icon">▲</span>
+        </button>
+        <nav class="stack-nav" id="stackNav">
+          <button class="stack-nav-item" data-target="dashboard">Dashboard</button>
+          <button class="stack-nav-item" data-target="sport">Sport</button>
+          <button class="stack-nav-item" data-target="ernährung">Ernährung</button>
+          <button class="stack-nav-item" data-target="community">Community</button>
+          <button class="stack-nav-item" data-target="profil">Profil</button>
+        </nav>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal für neuen Trainingsplan -->
+  <div id="addTrainingModal" class="modal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Neuen Trainingsplan erstellen</h3>
+        <button type="button" class="modal-close" onclick="closeAddTrainingModal()" aria-label="Schließen">&times;</button>
+      </div>
+      <form onsubmit="saveNewTrainingPlan(event)" class="modal-form">
+        <label for="newTrainingTitle">Planname</label>
+        <input id="newTrainingTitle" type="text" placeholder="z.B. Mein HIIT-Plan" required>
+        <label for="newTrainingDesc">Beschreibung</label>
+        <textarea id="newTrainingDesc" placeholder="z.B. 30 Min intensive Cardio" required></textarea>
+        <label for="newTrainingDuration">Dauer</label>
+        <input id="newTrainingDuration" type="text" placeholder="z.B. 45 min" required>
+        <label for="newTrainingDifficulty">Schwierigkeit</label>
+        <select id="newTrainingDifficulty" required>
+          <option value="">-- Wählen --</option>
+          <option value="Leicht">Leicht</option>
+          <option value="Mittel">Mittel</option>
+          <option value="Schwer">Schwer</option>
+        </select>
+        <div style="display:flex;gap:10px;margin-top:16px">
+          <button type="submit" class="btn primary" style="flex:1">Speichern</button>
+          <button type="button" class="btn" style="flex:1" onclick="closeAddTrainingModal()">Abbrechen</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal für neuen Essensplan -->
+  <div id="addMealModal" class="modal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Neuen Essensplan erstellen</h3>
+        <button type="button" class="modal-close" onclick="closeAddMealModal()" aria-label="Schließen">&times;</button>
+      </div>
+      <form onsubmit="saveNewMealPlan(event)" class="modal-form">
+        <label for="newMealTitle">Planname</label>
+        <input id="newMealTitle" type="text" placeholder="z.B. Mein Protein-Plan" required>
+        <label for="newMealDesc">Beschreibung</label>
+        <textarea id="newMealDesc" placeholder="z.B. High-Protein Ernährung" required></textarea>
+        <label for="newMealMeals">Mahlzeiten</label>
+        <input id="newMealMeals" type="text" placeholder="z.B. 5 Mahlzeiten/Tag" required>
+        <label for="newMealFocus">Fokus</label>
+        <input id="newMealFocus" type="text" placeholder="z.B. Proteinreich" required>
+        <div style="display:flex;gap:10px;margin-top:16px">
+          <button type="submit" class="btn primary" style="flex:1">Speichern</button>
+          <button type="button" class="btn" style="flex:1" onclick="closeAddMealModal()">Abbrechen</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

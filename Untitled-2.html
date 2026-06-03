@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fitnessstudio App (Frontend)</title>
+  <style>
+    :root{--accent:#2b8aef;--muted:#666}
+    *{box-sizing:border-box}
+    body{font-family:Inter,Segoe UI,Roboto,Arial;background:#f6f8fb;margin:0;color:#111}
+    header{background:#fff;border-bottom:1px solid #e6e9ef;padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+    .brand{font-weight:700;color:var(--accent)}
+    nav{display:flex;gap:8px;align-items:center}
+    button.nav-btn{background:transparent;border:0;padding:8px 12px;border-radius:8px;color:var(--muted);cursor:pointer}
+    button.nav-btn.active{background:var(--accent);color:#fff}
+    main{padding:20px;max-width:1100px;margin:20px auto}
+    .card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 6px 18px rgba(31,41,55,0.06);margin-bottom:16px}
+    form.row{display:flex;gap:8px;flex-wrap:wrap}
+    input,select,textarea{padding:10px;border:1px solid #dde6f0;border-radius:8px;width:100%}
+    .col{flex:1;min-width:180px}
+    .small{font-size:13px;color:var(--muted)}
+    .btn{background:var(--accent);color:#fff;border:0;padding:10px 14px;border-radius:8px;cursor:pointer}
+    .ghost{background:transparent;border:1px solid #e3e7ee;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .post{border-left:4px solid var(--accent);padding:10px;background:#fcfeff}
+    footer{padding:12px;text-align:center;color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">FitnessApp</div>
+    <nav id="nav">
+      <button class="nav-btn" data-view="login">Login</button>
+      <button class="nav-btn" data-view="dashboard">Dashboard</button>
+      <button class="nav-btn" data-view="profil">Profil</button>
+      <button class="nav-btn" data-view="sport">Sport</button>
+      <button class="nav-btn" data-view="ernaehrung">Ernährung</button>
+      <button class="nav-btn" data-view="einchecken">Einchecken</button>
+      <button class="nav-btn" data-view="community">Community</button>
+    </nav>
+    <div id="userArea" style="display:flex;gap:8px;align-items:center">
+      <div id="welcome" class="small"></div>
+      <button id="logout" class="ghost" style="display:none">Abmelden</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="views">
+      <!-- Login -->
+      <section id="login" class="card" style="display:none">
+        <h2>Login</h2>
+        <p class="small">Kein Backend nötig — Daten werden lokal im Browser gespeichert.</p>
+        <form id="loginForm" class="row">
+          <div class="col">
+            <label>Benutzername</label>
+            <input id="username" placeholder="MaxMustermann" required>
+          </div>
+          <div class="col">
+            <label>Passwort</label>
+            <input id="password" type="password" placeholder="Passwort" required>
+          </div>
+          <div style="flex-basis:100%;display:flex;gap:8px">
+            <button class="btn" type="submit">Einloggen</button>
+            <button id="registerBtn" type="button" class="ghost">Registrieren</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Dashboard -->
+      <section id="dashboard" class="card" style="display:none">
+        <h2>Dashboard</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Letzter Check-in</h3>
+            <div id="lastCheckin" class="small">Noch kein Check-in</div>
+          </div>
+          <div class="card">
+            <h3>Heute</h3>
+            <div id="todaySummary" class="small">Keine Aktivitäten</div>
+          </div>
+          <div class="card">
+            <h3>Community</h3>
+            <div class="small">Beiträge: <span id="postCount">0</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Profil -->
+      <section id="profil" class="card" style="display:none">
+        <h2>Profil</h2>
+        <form id="profileForm" class="row">
+          <div class="col">
+            <label>Name</label>
+            <input id="p_name" placeholder="Name">
+          </div>
+          <div class="col">
+            <label>Alter</label>
+            <input id="p_age" type="number" min="0" placeholder="Alter">
+          </div>
+          <div class="col">
+            <label>Geschlecht</label>
+            <select id="p_gender"><option value="">-</option><option>Männlich</option><option>Weiblich</option><option>Divers</option></select>
+          </div>
+          <div style="flex-basis:100%;display:flex;gap:8px">
+            <button class="btn" type="submit">Speichern</button>
+            <button id="clearProfile" type="button" class="ghost">Zurücksetzen</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Sport -->
+      <section id="sport" class="card" style="display:none">
+        <h2>Sport</h2>
+        <p class="small">Trainingspläne und Übungen (lokal).</p>
+        <div class="grid" id="workouts">
+          <div class="card">
+            <h4>Full Body</h4>
+            <p class="small">Kniebeugen, Liegestütze, Rudern</p>
+            <button class="btn" onclick="addActivity('Full Body')">Zu Aktivitäten hinzufügen</button>
+          </div>
+          <div class="card">
+            <h4>Cardio</h4>
+            <p class="small">Laufen, Radfahren, Seilspringen</p>
+            <button class="btn" onclick="addActivity('Cardio')">Zu Aktivitäten hinzufügen</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Ernährung -->
+      <section id="ernaehrung" class="card" style="display:none">
+        <h2>Ernährung</h2>
+        <p class="small">Einfaches Ernährungstagebuch.</p>
+        <form id="foodForm" class="row">
+          <div class="col"><input id="meal" placeholder="Mahlzeit (z. B. Frühstück: Haferflocken)"></div>
+          <div style="flex-basis:100%;display:flex;gap:8px">
+            <button class="btn" type="submit">Speichern</button>
+            <button id="clearMeals" type="button" class="ghost">Alle löschen</button>
+          </div>
+        </form>
+        <div id="mealsList" style="margin-top:12px"></div>
+      </section>
+
+      <!-- Einchecken -->
+      <section id="einchecken" class="card" style="display:none">
+        <h2>Einchecken</h2>
+        <p class="small">Checke dich beim Betreten des Studios ein.</p>
+        <div style="display:flex;gap:8px">
+          <button id="checkinBtn" class="btn">Einchecken</button>
+          <button id="checkinsClear" class="ghost">Verlauf löschen</button>
+        </div>
+        <div id="checkinList" style="margin-top:12px"></div>
+      </section>
+
+      <!-- Community -->
+      <section id="community" class="card" style="display:none">
+        <h2>Community</h2>
+        <form id="postForm" class="row">
+          <div class="col"><input id="postText" placeholder="Was möchtest du teilen?"></div>
+          <div style="flex-basis:100%;display:flex;gap:8px">
+            <button class="btn" type="submit">Posten</button>
+            <button id="clearPosts" type="button" class="ghost">Alle löschen</button>
+          </div>
+        </form>
+        <div id="posts" style="margin-top:12px"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer>FitnessApp — Demo (kein Backend). Daten werden nur lokal gespeichert.</footer>
+
+  <script>
+    // Simple single-file frontend app (lokal storage)
+    const views = document.querySelectorAll('#views > section')
+    const navButtons = document.querySelectorAll('.nav-btn')
+    const state = {user: null}
+
+    function showView(name){
+      views.forEach(v=>v.style.display = v.id===name ? 'block' : 'none')
+      navButtons.forEach(b=>b.classList.toggle('active', b.dataset.view===name))
+      localStorage.setItem('lastView', name)
+    }
+
+    // Init nav
+    navButtons.forEach(b=>b.addEventListener('click',()=>{
+      showView(b.dataset.view)
+    }))
+
+    // Auth (local)
+    const loginForm = document.getElementById('loginForm')
+    const usernameInput = document.getElementById('username')
+    const passwordInput = document.getElementById('password')
+    const welcome = document.getElementById('welcome')
+    const logout = document.getElementById('logout')
+
+    function updateUIForUser(){
+      if(state.user){
+        welcome.textContent = 'Hallo, ' + state.user
+        logout.style.display = 'inline-block'
+        // redirect to dashboard
+        showView('dashboard')
+      } else {
+        welcome.textContent = ''
+        logout.style.display = 'none'
+      }
+    }
+
+    loginForm.addEventListener('submit', e=>{
+      e.preventDefault()
+      const user = usernameInput.value.trim()
+      if(!user) return
+      state.user = user
+      localStorage.setItem('fa_user', user)
+      updateUIForUser()
+    })
+
+    document.getElementById('registerBtn').addEventListener('click', ()=>{
+      const user = usernameInput.value.trim()
+      if(!user){ alert('Bitte Benutzernamen eingeben.'); return }
+      // simple register => store profile
+      localStorage.setItem('fa_user', user)
+      localStorage.setItem('fa_profile_' + user, JSON.stringify({name:user}))
+      state.user = user
+      updateUIForUser()
+    })
+
+    logout.addEventListener('click', ()=>{
+      state.user = null
+      localStorage.removeItem('fa_user')
+      updateUIForUser()
+      showView('login')
+    })
+
+    // Profile
+    const profileForm = document.getElementById('profileForm')
+    function loadProfile(){
+      const u = localStorage.getItem('fa_user')
+      if(!u) return
+      const p = JSON.parse(localStorage.getItem('fa_profile_' + u) || '{}')
+      document.getElementById('p_name').value = p.name || ''
+      document.getElementById('p_age').value = p.age || ''
+      document.getElementById('p_gender').value = p.gender || ''
+    }
+    profileForm.addEventListener('submit', e=>{
+      e.preventDefault()
+      const u = localStorage.getItem('fa_user')
+      if(!u) return alert('Bitte einloggen')
+      const p = {name:document.getElementById('p_name').value.trim(),age:document.getElementById('p_age').value,gender:document.getElementById('p_gender').value}
+      localStorage.setItem('fa_profile_' + u, JSON.stringify(p))
+      alert('Profil gespeichert')
+    })
+    document.getElementById('clearProfile').addEventListener('click', ()=>{
+      document.getElementById('p_name').value = ''
+      document.getElementById('p_age').value = ''
+      document.getElementById('p_gender').value = ''
+    })
+
+    // Sport activities
+    function addActivity(name){
+      const u = localStorage.getItem('fa_user') || 'gast'
+      const activities = JSON.parse(localStorage.getItem('fa_activities_' + u) || '[]')
+      activities.push({name, time: new Date().toISOString()})
+      localStorage.setItem('fa_activities_' + u, JSON.stringify(activities))
+      updateTodaySummary()
+      alert('Aktivität hinzugefügt: ' + name)
+    }
+
+    function updateTodaySummary(){
+      const u = localStorage.getItem('fa_user') || 'gast'
+      const acts = JSON.parse(localStorage.getItem('fa_activities_' + u) || '[]')
+      const today = acts.filter(a=>new Date(a.time).toDateString()===new Date().toDateString())
+      document.getElementById('todaySummary').textContent = today.length ? today.map(a=>a.name).join(', ') : 'Keine Aktivitäten'
+    }
+
+    // Ernährung
+    const foodForm = document.getElementById('foodForm')
+    function renderMeals(){
+      const u = localStorage.getItem('fa_user') || 'gast'
+      const meals = JSON.parse(localStorage.getItem('fa_meals_' + u) || '[]')
+      const container = document.getElementById('mealsList')
+      container.innerHTML = meals.map(m=>`<div class="card small">${m.time.split('T')[0]} — ${m.text}</div>`).join('')
+    }
+    foodForm.addEventListener('submit', e=>{
+      e.preventDefault()
+      const u = localStorage.getItem('fa_user') || 'gast'
+      const text = document.getElementById('meal').value.trim()
+      if(!text) return
+      const meals = JSON.parse(localStorage.getItem('fa_meals_' + u) || '[]')
+      meals.unshift({text, time: new Date().toISOString()})
+      localStorage.setItem('fa_meals_' + u, JSON.stringify(meals))
+      document.getElementById('meal').value = ''
+      renderMeals()
+    })
+    document.getElementById('clearMeals').addEventListener('click', ()=>{
+      const u = localStorage.getItem('fa_user') || 'gast'
+      localStorage.removeItem('fa_meals_' + u)
+      renderMeals()
+    })
+
+    // Einchecken
+    const checkinBtn = document.getElementById('checkinBtn')
+    function renderCheckins(){
+      const u = localStorage.getItem('fa_user') || 'gast'
+      const items = JSON.parse(localStorage.getItem('fa_checkins_' + u) || '[]')
+      document.getElementById('checkinList').innerHTML = items.map(i=>`<div class="small">${new Date(i).toLocaleString()}</div>`).join('')
+      document.getElementById('lastCheckin').textContent = items.length ? new Date(items[0]).toLocaleString() : 'Noch kein Check-in'
+    }
+    checkinBtn.addEventListener('click', ()=>{
+      const u = localStorage.getItem('fa_user') || 'gast'
+      const arr = JSON.parse(localStorage.getItem('fa_checkins_' + u) || '[]')
+      arr.unshift(new Date().toISOString())
+      localStorage.setItem('fa_checkins_' + u, JSON.stringify(arr))
+      renderCheckins()
+    })
+    document.getElementById('checkinsClear').addEventListener('click', ()=>{
+      const u = localStorage.getItem('fa_user') || 'gast'
+      localStorage.removeItem('fa_checkins_' + u)
+      renderCheckins()
+    })
+
+    // Community
+    const postForm = document.getElementById('postForm')
+    function renderPosts(){
+      const posts = JSON.parse(localStorage.getItem('fa_posts') || '[]')
+      document.getElementById('posts').innerHTML = posts.map(p=>`<div class="post"><div class="small">${p.user} — ${new Date(p.time).toLocaleString()}</div><div style="margin-top:6px">${escapeHtml(p.text)}</div></div>`).join('')
+      document.getElementById('postCount').textContent = posts.length
+    }
+    postForm.addEventListener('submit', e=>{
+      e.preventDefault()
+      const text = document.getElementById('postText').value.trim()
+      if(!text) return
+      const user = localStorage.getItem('fa_user') || 'Gast'
+      const posts = JSON.parse(localStorage.getItem('fa_posts') || '[]')
+      posts.unshift({user, text, time: new Date().toISOString()})
+      localStorage.setItem('fa_posts', JSON.stringify(posts))
+      document.getElementById('postText').value = ''
+      renderPosts()
+    })
+    document.getElementById('clearPosts').addEventListener('click', ()=>{ localStorage.removeItem('fa_posts'); renderPosts() })
+
+    // Utilities
+    function escapeHtml(s){ return s.replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c]) }
+
+    // Load state
+    (function init(){
+      const u = localStorage.getItem('fa_user')
+      if(u) state.user = u
+      updateUIForUser()
+      const last = localStorage.getItem('lastView') || (state.user ? 'dashboard' : 'login')
+      showView(last)
+      loadProfile()
+      renderMeals(); renderCheckins(); renderPosts(); updateTodaySummary()
+    })()
+  </script>
+</body>
+</html>
