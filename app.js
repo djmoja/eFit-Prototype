@@ -241,14 +241,55 @@
   function drawUtilizationChart(){
     const svg = $('#utilizationChart');
     svg.innerHTML = '';
+    const labels = ['06:00','09:00','12:00','15:00','18:00','21:00','24:00'];
     const data = [60, 75, 45, 80, 55, 90, 65].map(()=> Math.random()*100|0);
-    const width = 200, height = 100, barW = 20, gap = 3;
-    let x = 5;
-    
-    data.forEach(val=> {
-      const barH = (val/100)*height;
-      svg.innerHTML += `<rect x="${x}" y="${height-barH}" width="${barW}" height="${barH}" fill="#34b76a" rx="2"/><text x="${x+barW/2}" y="${height+12}" text-anchor="middle" font-size="10" fill="#6b6b6b">${val}</text>`;
-      x += barW + gap;
+    const width = 200, height = 100, margin = 12;
+    const plotHeight = height - margin * 2;
+    const stepX = (width - margin * 2) / (data.length - 1);
+    const points = data.map((val, i)=> ({
+      x: margin + stepX * i,
+      y: margin + plotHeight - (val / 100) * plotHeight,
+      value: val,
+      label: labels[i]
+    }));
+    const xmlns = 'http://www.w3.org/2000/svg';
+
+    const baseLine = document.createElementNS(xmlns, 'line');
+    baseLine.setAttribute('x1', margin);
+    baseLine.setAttribute('y1', height - margin);
+    baseLine.setAttribute('x2', width - margin);
+    baseLine.setAttribute('y2', height - margin);
+    baseLine.setAttribute('stroke', '#d8d8d8');
+    baseLine.setAttribute('stroke-width', '1');
+    svg.appendChild(baseLine);
+
+    const path = document.createElementNS(xmlns, 'path');
+    path.setAttribute('d', points.map((p, i)=> `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' '));
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', '#34b76a');
+    path.setAttribute('stroke-width', '3');
+    path.setAttribute('stroke-linecap', 'round');
+    path.setAttribute('stroke-linejoin', 'round');
+    svg.appendChild(path);
+
+    points.forEach(p=> {
+      const circle = document.createElementNS(xmlns, 'circle');
+      circle.setAttribute('cx', p.x);
+      circle.setAttribute('cy', p.y);
+      circle.setAttribute('r', 4);
+      circle.setAttribute('fill', '#34b76a');
+      circle.setAttribute('stroke', '#fff');
+      circle.setAttribute('stroke-width', '2');
+      svg.appendChild(circle);
+
+      const text = document.createElementNS(xmlns, 'text');
+      text.setAttribute('x', p.x);
+      text.setAttribute('y', height - 2);
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('font-size', '9');
+      text.setAttribute('fill', '#6b6b6b');
+      text.textContent = p.label;
+      svg.appendChild(text);
     });
   }
 
