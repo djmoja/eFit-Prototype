@@ -39,6 +39,7 @@
   let currentUser = null;
   let navExpanded = false;
   let accessibilityEnabled = false;
+  let seniorModeEnabled = false;
 
   function showPage(name){
     pages.forEach(p=> p.classList.toggle('active', p.dataset.page===name));
@@ -46,7 +47,7 @@
     currentPage = name;
     
     // Update toggle button and close nav
-    const pageName = {dashboard:'Dashboard', sport:'Sport', ernährung:'Ernährung', community:'Community', profil:'Profil', login:'Login', register:'Registrieren'}[name] || name;
+    const pageName = {dashboard:'Dashboard', sport:'Sport', ernährung:'Ernährung', community:'Community', profil:'Profil', einchecken:'Einchecken', login:'Login', register:'Registrieren'}[name] || name;
     activePageName.textContent = pageName;
     closeStackNav();
     localStorage.setItem('spa:page', name);
@@ -75,8 +76,24 @@
     updateAccessibilityToggle();
   }
 
+  function setSeniorMode(enabled){
+    seniorModeEnabled = enabled;
+    document.documentElement.classList.toggle('senior-mode', enabled);
+    localStorage.setItem('spa:seniorMode', enabled ? '1' : '0');
+    updateSeniorToggle();
+    if(enabled){
+      openStackNav();
+    } else {
+      closeStackNav();
+    }
+  }
+
   function toggleAccessibilityMode(){
     setAccessibilityMode(!accessibilityEnabled);
+  }
+
+  function toggleSeniorMode(){
+    setSeniorMode(!seniorModeEnabled);
   }
 
   function updateAccessibilityToggle(){
@@ -84,6 +101,14 @@
     if(toggle){
       toggle.textContent = accessibilityEnabled ? 'Barrierefrei: AN' : 'Barrierefrei: AUS';
       toggle.setAttribute('aria-pressed', accessibilityEnabled.toString());
+    }
+  }
+
+  function updateSeniorToggle(){
+    const toggle = $('#seniorToggle');
+    if(toggle){
+      toggle.textContent = seniorModeEnabled ? 'Seniorenmodus: AN' : 'Seniorenmodus: AUS';
+      toggle.setAttribute('aria-pressed', seniorModeEnabled.toString());
     }
   }
 
@@ -477,7 +502,9 @@
       } catch(e){}
     }
     
+    const seniorModeSetting = localStorage.getItem('spa:seniorMode');
     setAccessibilityMode(accessibilitySetting === '1');
+    setSeniorMode(seniorModeSetting === '1');
     if(user){
       currentUser = JSON.parse(user);
       updateProfile();
@@ -500,6 +527,7 @@
     }));
 
     $('#accessibilityToggle')?.addEventListener('click', toggleAccessibilityMode);
+    $('#seniorToggle')?.addEventListener('click', toggleSeniorMode);
   }
 
   init();

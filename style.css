@@ -77,7 +77,7 @@ html,body{height:100%;margin:0;font-family:-apple-system,BlinkMacSystemFont,'Seg
 .register-text{font-size:12px;margin-top:16px;color:var(--muted)}
 .register-text a{color:var(--green-700);text-decoration:none;font-weight:600}
 
-.accessibility-panel{background:#f0fff3;border:1px solid #d8f1dc;border-radius:14px;padding:16px;margin-bottom:18px}
+.accessibility-panel,.senior-panel{background:#f0fff3;border:1px solid #d8f1dc;border-radius:14px;padding:16px;margin-bottom:18px}
 .accessibility-label{font-size:14px;font-weight:700;color:var(--green-800);margin-bottom:10px}
 .accessibility-note{font-size:12px;color:var(--green-600);margin-top:10px}
 
@@ -203,6 +203,9 @@ input:focus,textarea:focus{outline:none;border-color:var(--green-500);background
 .stack-nav.open{display:flex}
 
 .stack-nav-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
   background:transparent;
   border:none;
   color:white;
@@ -215,6 +218,23 @@ input:focus,textarea:focus{outline:none;border-color:var(--green-500);background
   border-bottom:1px solid rgba(0,0,0,0.1);
   text-transform:uppercase;
   letter-spacing:0.3px;
+}
+
+.stack-nav-item .icon{
+  display:none;
+  font-size:1.2rem;
+}
+
+.stack-nav-item .label{
+  display:inline-block;
+}
+
+html.senior-mode .stack-nav-item .icon{
+  display:inline-block;
+}
+
+html.senior-mode .stack-nav-item .label{
+  display:none;
 }
 
 .stack-nav-item:hover{
@@ -310,3 +330,56 @@ html.accessibility-mode .stack-nav-item:focus{outline:3px solid #04381f;outline-
 html.accessibility-mode .btn-add{width:50px;height:50px;font-size:28px;box-shadow:0 4px 12px rgba(0,0,0,0.15)}
 html.accessibility-mode .modal-content{max-width:100%;max-height:100%;border-radius:20px;padding:28px}
 html.accessibility-mode .modal-form input,html.accessibility-mode .modal-form textarea,html.accessibility-mode .modal-form select{min-height:48px;font-size:1rem}
+
+html.senior-mode{
+  font-size:1.2rem;
+  color:#2f1f00;
+  background:#fff8e7;
+}
+
+html.senior-mode body{background:#fff4d9}
+html.senior-mode .phone-screen{border-color:#8a5b10;box-shadow:0 24px 72px rgba(0,0,0,0.2)}
+html.senior-mode .page{padding:24px}
+html.senior-mode .btn,
+html.senior-mode input,
+html.senior-mode textarea,
+html.senior-mode .stack-nav-toggle,
+html.senior-mode .stack-nav-item{font-size:1.05rem;min-height:56px;border-radius:18px}
+html.senior-mode .btn{border-width:2px;border-color:#a46b15;color:#4d2d00;background:#fff1d0}
+html.senior-mode .btn.primary{background:#b87714;color:white;border-color:#8a520f}
+html.senior-mode input,html.senior-mode textarea{border-color:#cfa75d;background:#fff7e4;color:#3b2a11}
+html.senior-mode input::placeholder, html.senior-mode textarea::placeholder{color:#7e5c2d}
+html.senior-mode .page-header h2,
+html.senior-mode .section-title,
+html.senior-mode .accessibility-label,
+html.senior-mode .match-title,
+html.senior-mode .profile-card h3,
+html.senior-mode .member-header{color:#5d3610}
+html.senior-mode .page-header{border-color:#e3c58a}
+html.senior-mode .stat-card{background:linear-gradient(135deg,#b06b18,#d18d2e);color:white}
+html.senior-mode .chart-card,
+html.senior-mode .plan-item,
+html.senior-mode .profile-card,
+html.senior-mode .match-card,
+html.senior-mode .feed-item,
+html.senior-mode .member-card,
+html.senior-mode .checkin-card{box-shadow:0 6px 20px rgba(0,0,0,0.16);border:1px solid rgba(148,104,28,0.2);background:#fff9ec}
+html.senior-mode .plan-item{border-color:#d2b17f}
+html.senior-mode .chart-card{border-color:#d2b17f}
+html.senior-mode .stack-nav-toggle{background:#8a520f}
+html.senior-mode .stack-nav{background:#8a520f;display:flex !important;max-height:none;}
+html.senior-mode .stack-nav-toggle{display:none}
+html.senior-mode .stack-nav-item{color:#fff7e3;border-bottom:1px solid rgba(255,255,255,0.18);justify-content:center;padding:18px 0;letter-spacing:0}
+html.senior-mode .stack-nav-item:hover{background:rgba(255,255,255,0.18);padding-left:0}
+html.senior-mode .stack-nav-item .label{display:none}
+html.senior-mode .stack-nav-item .icon{font-size:1.9rem}
+html.senior-mode .stack-nav-item[data-senior-visible="false"]{display:none}
+html.senior-mode .stack-nav-item.active{background:rgba(255,255,255,0.25);border-left-color:#fff7e3;border-left:none}
+html.senior-mode .stack-nav-container{padding-bottom:12px}
+html.senior-mode .btn:focus,
+html.senior-mode input:focus,
+html.senior-mode textarea:focus,
+html.senior-mode .stack-nav-toggle:focus,
+html.senior-mode .stack-nav-item:focus{outline:3px solid #8a520f;outline-offset:3px}
+html.senior-mode .senior-panel{background:#fff3d4;border:1px solid #e5c28a;border-radius:14px;padding:16px;margin-bottom:18px}
+html.senior-mode .accessibility-note{font-size:0.95rem;color:#6d4b26}

@@ -140,6 +140,11 @@
               <button type="button" id="accessibilityToggle" class="btn secondary" aria-pressed="false">Barrierefrei: AUS</button>
               <p class="accessibility-note">Größere Texte, stärkere Kontrastfarben und größere Bedienelemente.</p>
             </div>
+            <div class="senior-panel">
+              <div class="accessibility-label">Ältere Leute Modus</div>
+              <button type="button" id="seniorToggle" class="btn secondary" aria-pressed="false">Seniorenmodus: AUS</button>
+              <p class="accessibility-note">Vereinfachtes Layout, größere Schaltflächen und weniger visuelle Ablenkung.</p>
+            </div>
             <form id="profileForm" class="profile-form">
               <label for="memberId">Mitgliedsnummer</label>
               <input id="memberId" name="memberId" placeholder="EF-000123" readonly>
@@ -244,11 +249,12 @@
           <span class="toggle-icon">▲</span>
         </button>
         <nav class="stack-nav" id="stackNav">
-          <button class="stack-nav-item" data-target="dashboard">Dashboard</button>
-          <button class="stack-nav-item" data-target="sport">Sport</button>
-          <button class="stack-nav-item" data-target="ernährung">Ernährung</button>
-          <button class="stack-nav-item" data-target="community">Community</button>
-          <button class="stack-nav-item" data-target="profil">Profil</button>
+          <button class="stack-nav-item" data-target="dashboard" data-senior-visible="true"><span class="icon">🏠</span><span class="label">Dashboard</span></button>
+          <button class="stack-nav-item" data-target="sport" data-senior-visible="true"><span class="icon">💪</span><span class="label">Sport</span></button>
+          <button class="stack-nav-item" data-target="ernährung" data-senior-visible="false"><span class="icon">🥗</span><span class="label">Ernährung</span></button>
+          <button class="stack-nav-item" data-target="community" data-senior-visible="false"><span class="icon">👥</span><span class="label">Community</span></button>
+          <button class="stack-nav-item" data-target="einchecken" data-senior-visible="true"><span class="icon">🎫</span><span class="label">Einchecken</span></button>
+          <button class="stack-nav-item" data-target="profil" data-senior-visible="true"><span class="icon">👤</span><span class="label">Profil</span></button>
         </nav>
       </div>
 

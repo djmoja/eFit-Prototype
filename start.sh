@@ -4,10 +4,10 @@
 
 if command -v python3 >/dev/null 2>&1; then
   echo "Starting server on http://localhost:8000"
-  python3 -m http.server 8000
+  python3 -m http.server 8000 --bind 127.0.0.1
 elif command -v python >/dev/null 2>&1; then
   echo "Starting server on http://localhost:8000"
-  python -m http.server 8000
+  python -m http.server 8000 --bind 127.0.0.1
 else
   echo "No python found — opening index.html"
   if command -v xdg-open >/dev/null 2>&1; then

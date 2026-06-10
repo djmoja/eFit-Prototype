@@ -4,7 +4,7 @@ $py = Get-Command python -ErrorAction SilentlyContinue
 if (-not $py) { $py = Get-Command python3 -ErrorAction SilentlyContinue }
 if ($py) {
   Write-Host "Starte lokalen Server auf http://localhost:8000 (mit Ctrl+C stoppen)"
-  & $py.Path -m http.server 8000
+  & $py.Path -m http.server 8000 --bind 127.0.0.1
 } else {
   Write-Host "Python nicht gefunden. Öffne index.html im Standardbrowser."
   Start-Process index.html
