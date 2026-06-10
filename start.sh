@@ -1,6 +1,7 @@
-#!/bin/sh
-# Start script: tries python3/python, otherwise opens index.html
-# python -m http.server 8000 
+
+
+# Startbefehl Terminal: python3 -m http.server 8000
+
 if command -v python3 >/dev/null 2>&1; then
   echo "Starting server on http://localhost:8000"
   python3 -m http.server 8000
